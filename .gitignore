@@ -1,0 +1,13 @@
+# Instance CTFd et sauvegardes : donnees des participants, ne jamais versionner
+ctf-backups/
+*.zip
+
+# Secrets et base locale
+.env
+db.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/

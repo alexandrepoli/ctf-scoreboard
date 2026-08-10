@@ -1,0 +1,144 @@
+:root {
+  --beige: #f7ead0;
+  --turquoise: #3fe0d0;
+  --turquoise-deep: #0a8b80;
+
+  /* texte sombre : le fond est clair, il faut inverser le contraste */
+  --ink: #06323a;
+  --ink-soft: #26474b;
+
+  --ramp-dark: linear-gradient(100deg, var(--ink) 0%, #145a5c 45%, var(--turquoise-deep) 100%);
+
+  --font-display: 'Orbitron', 'Segoe UI Semibold', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Rajdhani', 'Segoe UI Semibold', 'Segoe UI', system-ui, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  /* fond de page : degrade beige -> turquoise */
+  background: linear-gradient(160deg, #fdf4e2 0%, #f7ead0 28%, #cfe8dc 58%, #7fdcd2 82%, #3fe0d0 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding: 1.5vh 2vw;
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 1vh;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4.2vh, 3.4rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  background: var(--ramp-dark);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* drop-shadow au lieu de text-shadow : text-shadow passerait sous le texte clippe */
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.6));
+}
+
+/* barre d'accent sous le titre */
+h1 + #status::before {
+  content: "";
+  display: block;
+  width: min(60vw, 900px);
+  height: 5px;
+  margin: 0 auto 1vh;
+  border-radius: 999px;
+  background: linear-gradient(100deg, var(--turquoise-deep) 0%, #145a5c 55%, var(--ink) 100%);
+  opacity: 0.9;
+}
+
+#status {
+  text-align: center;
+  min-height: 1.2em;
+  font-size: clamp(0.9rem, 1.8vh, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #8a3a2a;
+}
+
+table {
+  width: 96vw;
+  max-width: 1900px;
+  margin: 1vh auto;
+  border-collapse: collapse;
+  /* dimensionne en vh : 20 lignes doivent tenir dans un ecran */
+  font-size: clamp(0.75rem, 2.1vh, 2.1rem);
+  font-weight: 600;
+  /* panneau clair translucide : detache le tableau du degrade */
+  background: rgba(255, 255, 255, 0.55);
+  border: 3px solid var(--turquoise-deep);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 50px rgba(6, 50, 58, 0.28);
+}
+
+th, td {
+  padding: 0.25em 0.7em;
+  text-align: left;
+}
+
+/* Rang etroit, Score aligne a droite : lecture rapide de loin */
+th:first-child, td:first-child {
+  width: 12%;
+  text-align: center;
+}
+
+th:last-child, td:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+thead {
+  background: rgba(10, 139, 128, 0.16);
+  border-bottom: 3px solid var(--turquoise-deep);
+}
+
+thead th {
+  font-family: var(--font-display);
+  font-size: 0.5em;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+tbody tr {
+  color: var(--ink);
+  border-bottom: 2px solid rgba(10, 139, 128, 0.22);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Rampe : turquoise profond en tete -> encre vers le bas du classement */
+tbody tr:nth-child(1) { color: #0a8b80; }
+tbody tr:nth-child(2) { color: #12766f; }
+tbody tr:nth-child(3) { color: #1a6360; }
+tbody tr:nth-child(4) { color: #205352; }
+tbody tr:nth-child(5) { color: #26474b; }
+
+tbody tr:first-child {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.15em;
+  letter-spacing: 0.01em;
+  background: rgba(10, 139, 128, 0.14);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+tbody tr:nth-child(2),
+tbody tr:nth-child(3) {
+  font-size: 1.06em;
+  font-weight: 700;
+}
