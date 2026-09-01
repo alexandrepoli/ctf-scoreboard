@@ -2,21 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>🌊 CTF Scoreboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classement CTF — Nautilus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,700;6..96,900&family=Share+Tech+Mono&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🌊 Classement CTF</h1>
+  <h1><span class="eyebrow">Relevé de plongée</span>Classement CTF</h1>
   <div id="status"></div>
-  <table id="scoreboard">
-    <thead>
-      <tr><th>Rang</th><th>Nom</th><th>Score</th></tr>
-    </thead>
-    <tbody id="scoreboard-body"></tbody>
-  </table>
+  <div class="hull">
+    <table id="scoreboard">
+      <thead>
+        <tr><th>Rang</th><th>Nom</th><th>Score</th></tr>
+      </thead>
+      <tbody id="scoreboard-body"></tbody>
+    </table>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>

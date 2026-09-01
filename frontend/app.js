@@ -30,6 +30,8 @@ function render(data) {
 
   bodyEl.replaceChildren(...data.slice(0, MAX_TEAMS).map(getRow));
 
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
   for (const tr of bodyEl.children) {
     const from = before.get(tr);
     if (from === undefined) continue;
