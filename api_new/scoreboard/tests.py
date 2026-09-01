@@ -3,7 +3,11 @@ from unittest.mock import patch
 
 from django.test import Client, TestCase
 
-from scoreboard.ctfd_client import CTFdUnavailableError, ScoreVisibilityError
+from scoreboard.ctfd_client import (
+    CTFdUnavailableError,
+    ScoreVisibilityError,
+    fetch_scoreboard,
+)
 
 
 class ScoreboardViewTests(TestCase):
@@ -39,3 +43,26 @@ class ScoreboardViewTests(TestCase):
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(json.loads(response.content), {"success": False, "data": []})
+
+
+class CTFdClientTests(TestCase):
+    @patch("scoreboard.ctfd_client.requests.get")
+    def test_login_redirect_is_a_visibility_error(self, mock_get):
+        # CTFd renvoie 302 vers /login quand les scores ne sont pas publics
+        mock_get.return_value.status_code = 302
+        mock_get.return_value.is_redirect = True
+
+        with self.assertRaises(ScoreVisibilityError):
+            fetch_scoreboard("https://exemple.test")
+
+    @patch("scoreboard.ctfd_client.requests.get")
+    def test_token_is_sent_as_authorization_header(self, mock_get):
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.is_redirect = False
+        mock_get.return_value.json.return_value = {"data": []}
+
+        fetch_scoreboard("https://exemple.test", "jeton")
+
+        self.assertEqual(
+            mock_get.call_args.kwargs["headers"], {"Authorization": "Token jeton"}
+        )

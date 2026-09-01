@@ -27,3 +27,4 @@ DATABASES = {
 }
 
 CTFD_URL = os.getenv("CTFD_URL", "http://localhost:8000")
+CTFD_TOKEN = os.getenv("CTFD_TOKEN", "")

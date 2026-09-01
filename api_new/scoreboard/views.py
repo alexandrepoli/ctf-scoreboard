@@ -6,7 +6,7 @@ from scoreboard.ctfd_client import CTFdUnavailableError, ScoreVisibilityError, f
 
 def get_scoreboard(request):
     try:
-        data = fetch_scoreboard(settings.CTFD_URL)
+        data = fetch_scoreboard(settings.CTFD_URL, settings.CTFD_TOKEN)
     except ScoreVisibilityError:
         return JsonResponse({"success": False, "data": []}, status=403)
     except CTFdUnavailableError:
