@@ -6,6 +6,8 @@ let fetchInFlight = false;
 // une <tr> par equipe, reutilisee d'un refresh a l'autre : c'est ce qui rend
 // l'animation de depassement possible (meme noeud DOM = meme element anime)
 const rows = new Map();
+// position au rafraichissement precedent : sert a marquer qui monte et qui descend
+const positionsPrecedentes = new Map();
 
 function getRow(team) {
   let tr = rows.get(team.name);
@@ -18,6 +20,15 @@ function getRow(team) {
   pos.textContent = team.pos;
   name.textContent = team.name;
   score.textContent = team.score;
+
+  const precedente = positionsPrecedentes.get(team.name);
+  if (precedente === undefined || precedente === team.pos) {
+    tr.removeAttribute("data-mouvement");
+  } else {
+    tr.dataset.mouvement = precedente > team.pos ? "monte" : "descend";
+  }
+  positionsPrecedentes.set(team.name, team.pos);
+
   return tr;
 }
 

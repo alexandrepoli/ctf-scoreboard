@@ -12,6 +12,10 @@
   --phosphore: #4fd6c0;
   --cuivre: #b4623c;
 
+  /* podium */
+  --argent: #d3dde2;
+  --bronze: #cf9160;
+
   --font-plaque: 'Bodoni Moda', 'Didot', Georgia, serif;
   --font-releve: 'Share Tech Mono', 'Consolas', ui-monospace, monospace;
 }
@@ -27,42 +31,19 @@ body {
   min-height: 100vh;
   font-family: var(--font-releve);
   color: var(--phosphore);
-  /* halo de surface en haut, nuit abyssale en bas */
   background:
     radial-gradient(120% 60% at 50% -10%, #17454b 0%, #0a2229 38%, transparent 72%),
     linear-gradient(180deg, #071a20 0%, #040e13 55%, #01060a 100%);
   background-attachment: fixed;
 }
 
-/* ---------- plaque gravee ---------- */
-
-h1 {
-  margin: 0 0 1.2vh;
-  text-align: center;
-  font-family: var(--font-plaque);
-  font-weight: 900;
-  font-size: clamp(1.3rem, 3.6vh, 3rem);
-  letter-spacing: 0.06em;
-  color: var(--laiton-clair);
-  /* gravure : lumiere en haut du trait, ombre portee dans le metal */
-  text-shadow: 0 -1px 0 var(--laiton-sombre), 0 2px 0 #2a1d05, 0 3px 12px rgba(0, 0, 0, 0.7);
-}
-
-h1 .eyebrow {
-  display: block;
-  margin-bottom: 0.5vh;
-  font-family: var(--font-releve);
-  font-size: clamp(0.6rem, 1.4vh, 1rem);
-  font-weight: 400;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: var(--phosphore);
-  text-shadow: none;
-  opacity: 0.75;
+/* rien a signaler = pas de place occupee */
+#status:empty {
+  display: none;
 }
 
 #status {
-  min-height: 1.2em;
+  padding: 0.6vh 0 1vh;
   text-align: center;
   font-size: clamp(0.8rem, 1.7vh, 1.3rem);
   letter-spacing: 0.14em;
@@ -73,46 +54,81 @@ h1 .eyebrow {
 /* ---------- coque rivetee ---------- */
 
 .hull {
+  position: relative;
+  overflow: hidden;
   width: 96vw;
-  max-width: 1800px;
-  margin: 1vh auto;
-  padding: 24px 16px;
+  max-width: 2400px;
+  margin: 0 auto;
+  padding: 16px;
   box-sizing: border-box;
   border: 3px solid var(--laiton-sombre);
   border-radius: 10px;
-  /* 2 rails de rivets (haut/bas) poses sur le degrade de la colonne d'eau */
+  /* rails de rivets + rayon de surface, poses sur le degrade de la colonne d'eau */
   background-image:
     radial-gradient(circle, var(--laiton-clair) 0 1px, var(--laiton) 1px 2.6px, transparent 2.9px),
     radial-gradient(circle, var(--laiton-clair) 0 1px, var(--laiton) 1px 2.6px, transparent 2.9px),
+    radial-gradient(70% 45% at 50% 0%, rgba(120, 220, 210, 0.13) 0%, transparent 72%),
     linear-gradient(180deg, var(--eau-surface) 0%, #0c2c34 26%, #061820 58%, var(--eau-fond) 100%);
-  background-size: 38px 16px, 38px 16px, auto;
-  background-position: 8px 6px, 8px calc(100% - 6px), 0 0;
-  background-repeat: repeat-x, repeat-x, no-repeat;
+  background-size: 38px 16px, 38px 16px, auto, auto;
+  background-position: 8px 6px, 8px calc(100% - 6px), 0 0, 0 0;
+  background-repeat: repeat-x, repeat-x, no-repeat, no-repeat;
   box-shadow:
     inset 0 0 0 1px rgba(201, 162, 63, 0.35),
     inset 0 14px 40px rgba(0, 0, 0, 0.55),
     0 18px 60px rgba(0, 0, 0, 0.6);
 }
 
+/* bulles : une tuile de 260px qui defile, donc raccord invisible en boucle */
+.hull::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle 5px at 12% 86%, rgba(200, 250, 242, 0.4), transparent 70%),
+    radial-gradient(circle 3px at 31% 42%, rgba(200, 250, 242, 0.34), transparent 70%),
+    radial-gradient(circle 6px at 54% 68%, rgba(200, 250, 242, 0.26), transparent 70%),
+    radial-gradient(circle 4px at 73% 22%, rgba(200, 250, 242, 0.36), transparent 70%),
+    radial-gradient(circle 5px at 88% 55%, rgba(200, 250, 242, 0.3), transparent 70%),
+    radial-gradient(circle 3px at 45% 12%, rgba(200, 250, 242, 0.32), transparent 70%),
+    radial-gradient(circle 4px at 22% 60%, rgba(200, 250, 242, 0.28), transparent 70%),
+    radial-gradient(circle 3px at 65% 91%, rgba(200, 250, 242, 0.3), transparent 70%);
+  background-size: 100% 260px;
+  animation: bulles 22s linear infinite;
+}
+
+@keyframes bulles {
+  to { background-position: 0 -260px; }
+}
+
+/* ---------- le releve ---------- */
+
 table {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  border-collapse: collapse;
-  font-size: clamp(0.75rem, 2.1vh, 2.1rem);
-  /* le fond reste transparent : c'est le degrade de .hull qui fait la profondeur */
+  /* separate + border-spacing : c'est ce qui detache les plaques les unes des autres */
+  border-collapse: separate;
+  border-spacing: 0 7px;
+  font-size: clamp(0.74rem, 1.9vh, 2.05rem);
   background: transparent;
 }
 
 th, td {
-  padding: 0.25em 0.7em;
+  padding: 0.24em 0.9em;
+  line-height: 1.2;
   text-align: left;
 }
 
 th:first-child, td:first-child {
-  width: 10%;
+  width: 8%;
   text-align: center;
 }
 
 th:last-child, td:last-child {
+  /* colonne serree : le nombre reste pres de son filet */
+  width: 15%;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -121,7 +137,7 @@ th:last-child, td:last-child {
 
 thead th {
   font-family: var(--font-releve);
-  padding: 0.5em 0.7em;
+  padding: 0.5em 0.9em;
   font-size: 0.62em;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -135,53 +151,150 @@ thead th {
 thead th:first-child { border-top-left-radius: 3px; }
 thead th:last-child { border-top-right-radius: 3px; }
 
-/* ---------- releve ---------- */
+/* ---------- une plaque par ligne ---------- */
 
 tbody tr {
   color: var(--phosphore);
-  border-bottom: 1px solid rgba(201, 162, 63, 0.14);
 }
 
-/* stries de hublot : laissent passer le degrade en dessous */
-tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.028);
+tbody td {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 tbody td:first-child {
+  position: relative;
+  border-radius: 8px 0 0 8px;
+  font-family: var(--font-plaque);
+  font-weight: 700;
+  font-size: 1.08em;
   color: var(--laiton);
-  font-variant-numeric: tabular-nums;
 }
 
 tbody td:last-child {
-  color: var(--phosphore);
+  border-radius: 0 8px 8px 0;
+  border-left: 1px solid rgba(201, 162, 63, 0.1);
+  letter-spacing: 0.04em;
   text-shadow: 0 0 10px rgba(79, 214, 192, 0.45);
 }
 
-/* les 3 premiers sont dans la lumiere : ils virent au laiton */
-tbody tr:nth-child(-n+3) td,
-tbody tr:nth-child(-n+3) td:first-child,
-tbody tr:nth-child(-n+3) td:last-child {
-  color: var(--laiton-clair);
-  text-shadow: 0 0 12px rgba(242, 223, 160, 0.3);
+tbody td:nth-child(2) {
+  letter-spacing: 0.02em;
 }
 
-tbody tr:first-child {
-  background: linear-gradient(90deg, rgba(201, 162, 63, 0.05) 0%, rgba(201, 162, 63, 0.16) 50%, rgba(201, 162, 63, 0.05) 100%);
-  box-shadow: inset 0 0 0 1px rgba(201, 162, 63, 0.28);
+/* ---------- mouvement depuis le dernier rafraichissement ---------- */
+
+tbody tr[data-mouvement] td:first-child::after {
+  position: absolute;
+  right: 0.45em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-releve);
+  font-size: 0.62em;
+  line-height: 1;
 }
 
-tbody tr:first-child td {
+tbody tr[data-mouvement="monte"] td:first-child::after {
+  content: "\25B2";
+  color: #62dfae;
+}
+
+tbody tr[data-mouvement="descend"] td:first-child::after {
+  content: "\25BC";
+  color: var(--cuivre);
+}
+
+/* ---------- podium ---------- */
+
+tbody tr:nth-child(1) td {
   font-family: var(--font-plaque);
   font-weight: 700;
-  font-size: 1.1em;
+  font-size: 1.15em;
   letter-spacing: 0.02em;
+  color: var(--laiton-clair);
+  border-top-color: rgba(242, 223, 160, 0.45);
+  border-bottom-color: rgba(0, 0, 0, 0.45);
+  padding-top: 0.34em;
+  padding-bottom: 0.34em;
+  background-color: transparent;
+  background-image: linear-gradient(180deg, rgba(242, 223, 160, 0.22) 0%, rgba(201, 162, 63, 0.13) 100%);
+  text-shadow: 0 0 14px rgba(242, 223, 160, 0.35);
+}
+
+/* reflet qui balaie la plaque du leader. Exclut la colonne du rang, sinon il
+   ecraserait le fond de la medaille. */
+tbody tr:nth-child(1) td:not(:first-child) {
+  background-image:
+    linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.16) 50%, transparent 58%),
+    linear-gradient(180deg, rgba(242, 223, 160, 0.22) 0%, rgba(201, 162, 63, 0.13) 100%);
+  background-size: 220% 100%, auto;
+  background-repeat: no-repeat, repeat;
+  animation: reflet 7s ease-in-out infinite;
+}
+
+@keyframes reflet {
+  from { background-position: -120% 0, 0 0; }
+  to { background-position: 220% 0, 0 0; }
+}
+
+tbody tr:nth-child(1) td:first-child {
+  font-size: 1.24em;
+}
+
+tbody tr:nth-child(2) td {
+  color: var(--argent);
+  background-color: rgba(211, 221, 226, 0.1);
+  border-top-color: rgba(211, 221, 226, 0.28);
+  text-shadow: 0 0 12px rgba(211, 221, 226, 0.28);
+}
+
+tbody tr:nth-child(3) td {
+  color: var(--bronze);
+  background-color: rgba(207, 145, 96, 0.12);
+  border-top-color: rgba(207, 145, 96, 0.3);
+  text-shadow: 0 0 12px rgba(207, 145, 96, 0.28);
+}
+
+/* medaille : disque frappe derriere le numero du podium */
+tbody tr:nth-child(1) td:first-child::before,
+tbody tr:nth-child(2) td:first-child::before,
+tbody tr:nth-child(3) td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1.75em;
+  height: 1.75em;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+tbody tr:nth-child(1) td:first-child::before {
+  background: radial-gradient(circle at 38% 32%, rgba(255, 246, 214, 0.6), rgba(201, 162, 63, 0.38) 70%);
+  box-shadow: 0 0 16px rgba(242, 223, 160, 0.4);
+}
+
+tbody tr:nth-child(2) td:first-child::before {
+  background: radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.45), rgba(211, 221, 226, 0.26) 70%);
+}
+
+tbody tr:nth-child(3) td:first-child::before {
+  background: radial-gradient(circle at 38% 32%, rgba(255, 214, 176, 0.5), rgba(207, 145, 96, 0.3) 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hull::after,
+  tbody tr:nth-child(1) td:not(:first-child) {
+    animation: none;
+  }
 }
 
 /* petit ecran : le releve doit tenir en largeur, sinon la colonne score deborde */
 @media (max-width: 760px) {
-  .hull { padding: 18px 8px; }
+  .hull { padding: 14px 8px; }
   table { font-size: clamp(0.7rem, 1.8vh, 1.1rem); }
-  th, td { padding: 0.25em 0.4em; }
+  th, td { padding: 0.22em 0.4em; }
   thead th { letter-spacing: 0.12em; }
-  h1 .eyebrow { letter-spacing: 0.25em; }
 }
