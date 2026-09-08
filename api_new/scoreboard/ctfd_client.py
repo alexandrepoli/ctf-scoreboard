@@ -10,8 +10,14 @@ class ScoreVisibilityError(Exception):
 
 
 def fetch_scoreboard(ctfd_url: str, token: str = "") -> list[dict]:
-    # un token n'est necessaire que si l'instance ne publie pas ses scores
-    headers = {"Authorization": f"Token {token}"} if token else {}
+    # un token n'est necessaire que si l'instance ne publie pas ses scores.
+    # CTFd n'honore l'en-tete Authorization que si la requete est en JSON
+    # (test request.is_json cote serveur) : sans Content-Type, il redirige vers /login.
+    headers = (
+        {"Authorization": f"Token {token}", "Content-Type": "application/json"}
+        if token
+        else {}
+    )
 
     try:
         response = requests.get(

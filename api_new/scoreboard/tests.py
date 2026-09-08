@@ -64,5 +64,6 @@ class CTFdClientTests(TestCase):
         fetch_scoreboard("https://exemple.test", "jeton")
 
         self.assertEqual(
-            mock_get.call_args.kwargs["headers"], {"Authorization": "Token jeton"}
+            mock_get.call_args.kwargs["headers"],
+            {"Authorization": "Token jeton", "Content-Type": "application/json"},
         )
