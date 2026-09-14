@@ -31,8 +31,12 @@ frontend/                    page statique
 ├── style.css
 ├── app.js
 ├── logo-hackagou.png        logo des organisateurs (filigrane)
-└── logo-icone.webp          icone d'onglet
-docs/scoreboard.png          capture utilisée par le README
+├── logo-icone.webp          icone d'onglet
+├── double.html              variante 40 rangs, deux colonnes
+├── double.css               ce qui change par rapport a style.css
+└── double.js                logique a deux colonnes
+docs/scoreboard.png          capture du tableau simple
+docs/scoreboard-double.png   capture du double tableau (README)
 ```
 
 ---
@@ -346,6 +350,28 @@ loadScoreboard();
 setInterval(loadScoreboard, REFRESH_MS);
 ```
 Premier appel immédiat, sinon la page resterait vide 7 s.
+
+---
+
+## Variante 40 rangs — `double.html`, `double.css`, `double.js`
+
+Même principe, deux colonnes : rangs 1 à 20 à gauche, 21 à 40 à droite. Servie à `/double.html` par le catch-all de `urls.py`, sans changement côté backend. Le tableau simple reste intact à `/`.
+
+**Une seule coque pour les deux colonnes.** Une équipe qui passe du rang 22 au rang 18 change de `<tbody>`. Dans une seule coque, sa ligne traverse l'écran ; avec deux cadres séparés, chacun en `overflow: hidden`, elle disparaîtrait d'un côté pour réapparaître de l'autre.
+
+**`double.css`** ne contient que les écarts avec `style.css` :
+
+- la grille à deux colonnes (`.colonnes`) ;
+- les noms trop longs coupés par « … », sinon un nom long élargit sa colonne et pousse l'autre ;
+- la remise à zéro du podium dans la colonne de droite. Les règles de podium de `style.css` visent les trois premières lignes **de chaque** `<tbody>` : à droite, ce sont les rangs 21 à 23, qui prendraient sinon l'or, l'argent et le bronze ;
+- l'alignement des lignes entre colonnes. La plaque du leader est plus haute : rang en `1.24em`, marge `.34em`, soit `1.24 × (1.2 + 2 × .34) = 2,331em`. Le rang 21 reçoit une marge de `.479em`, qui donne la même hauteur (`1.08 × (1.2 + 2 × .479)`). Tout étant en `em`, l'alignement tient à toutes les tailles d'écran.
+
+**`double.js`** reprend `app.js` avec deux différences :
+
+- `render` répartit les 40 premières lignes entre `#corps-gauche` et `#corps-droite` ;
+- le FLIP mesure la position **horizontale et verticale** (`translate(dx, dy)` au lieu de `translateY`), puisqu'une ligne peut changer de colonne.
+
+Le nom complet est aussi posé en `title` sur la cellule, pour les noms tronqués.
 
 ---
 
