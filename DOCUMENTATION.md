@@ -29,7 +29,9 @@ api_new/                     backend Django
 frontend/                    page statique
 ├── index.html
 ├── style.css
-└── app.js
+├── app.js
+├── logo-hackagou.png        logo des organisateurs (filigrane)
+└── logo-icone.webp          icone d'onglet
 docs/scoreboard.png          capture utilisée par le README
 ```
 
@@ -251,6 +253,8 @@ Structure minimale, vide de données au chargement : c'est `app.js` qui remplit 
 
 Trois ancres pour le reste du code : `#status` (zone de message), `#scoreboard-body` (lignes injectées), `.hull` (la coque, qui porte le décor).
 
+L'icône d'onglet (`logo-icone.webp`) est l'icône HacKagou fournie par les organisateurs.
+
 Il n'y a **pas de titre** : sur un écran dédié, le contexte est connu de la salle, et les 20 lignes valent mieux que deux lignes d'en-tête.
 
 Les polices viennent de Google Fonts : **Bodoni Moda**, une didone dans l'esprit des éditions Hetzel de Jules Verne, pour les rangs et le leader ; **Share Tech Mono** pour les noms et les scores, qui donne des chiffres de largeur fixe et un air de relevé d'instrument.
@@ -262,6 +266,8 @@ Thème « Nautilus » : coque de métal rivetée posée sur une colonne d'eau qu
 **Jetons de couleur** (`:root`) — laiton, laiton clair et sombre, phosphore (le turquoise des scores), cuivre (les messages d'erreur), argent et bronze pour le podium, plus les deux bornes de la colonne d'eau.
 
 **`.hull`** empile quatre couches de fond dans une seule propriété : deux rails de rivets (`radial-gradient` répétés horizontalement), un halo de lumière de surface, et le dégradé vertical de la colonne d'eau. Aucune image n'est chargée.
+
+**`.hull::before`** pose le logo des organisateurs en filigrane : centré, sur 72 % de la hauteur de la coque, à 8 % d'opacité. **Pourquoi un pseudo-élément et pas une couche de fond de plus :** une couche de `background` ne peut pas avoir sa propre opacité, alors qu'un pseudo-élément si. Le logo est blanc sur transparent, il n'est pas recoloré — c'est une marque. Il se place naturellement dans l'espace vide entre les noms (à gauche) et les scores (à droite), et reste sous le tableau (`z-index` 0 contre 1), donc sous les plaques et les bulles.
 
 **`.hull::after`** dessine les bulles : huit `radial-gradient` dans une tuile de 260 px, animée en boucle vers le haut. **Pourquoi une tuile plutôt que des éléments :** le motif se répète à l'identique, donc le raccord de la boucle est invisible, et il n'y a aucun nœud DOM supplémentaire à animer.
 

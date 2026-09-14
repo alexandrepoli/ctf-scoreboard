@@ -78,6 +78,17 @@ body {
     0 18px 60px rgba(0, 0, 0, 0.6);
 }
 
+/* logo des organisateurs en filigrane : centre, derriere les plaques, sous les bulles */
+.hull::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url("logo-hackagou.png") center / auto 72% no-repeat;
+  opacity: 0.08;
+}
+
 /* bulles : une tuile de 260px qui defile, donc raccord invisible en boucle */
 .hull::after {
   content: "";
