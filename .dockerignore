@@ -1,0 +1,16 @@
+# le contexte de build ne doit contenir que le code : sans ca, Docker envoie
+# les 465 Mo de ctf-backups et les archives a chaque construction
+.git/
+ctf-backups/
+docs/
+*.zip
+
+# secrets et base locale : ils ne doivent jamais entrer dans une image
+**/.env
+**/db.sqlite3
+
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.venv/
+venv/

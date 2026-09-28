@@ -26,6 +26,9 @@ api_new/                     backend Django
 ├── db.sqlite3
 ├── scoreboard/              l'app (code métier)
 └── scoreboard_project/      le projet (config globale)
+Dockerfile                   image de l'application
+docker-compose.yml           lancement en une commande
+.dockerignore                ce qui reste hors du contexte de build
 frontend/                    page statique
 ├── index.html
 ├── style.css
@@ -346,6 +349,26 @@ loadScoreboard();
 setInterval(loadScoreboard, REFRESH_MS);
 ```
 Premier appel immédiat, sinon la page resterait vide 7 s.
+
+---
+
+## Mise en conteneur — `Dockerfile`, `docker-compose.yml`
+
+**`python:3.13-slim`** existe en arm64 : la même image tourne sur un PC et sur le Raspberry Pi qui affichera le classement.
+
+**`requirements.txt` est copié seul, avant le reste du code.** Docker garde une couche par instruction et la réutilise tant que ses entrées ne changent pas : en copiant les dépendances d'abord, une modification du CSS ne déclenche pas une réinstallation de Django.
+
+**`gunicorn` plutôt que `runserver`.** Le serveur de `manage.py runserver` est un serveur de développement, mono-thread, que Django déconseille explicitement ailleurs. Il impose aussi de garder `DEBUG = True`. Deux *workers* suffisent largement pour un écran qui interroge l'API toutes les 7 secondes.
+
+**`scoreboard_project/wsgi.py`** n'existait pas : `manage.py` pose lui-même `DJANGO_SETTINGS_MODULE`, alors qu'un serveur WSGI importe l'application directement et a besoin de ce point d'entrée.
+
+**L'application tourne sous un compte sans privilèges** (`USER scoreboard`). Elle ne stocke rien et n'écrit nulle part, donc rien ne justifie de la laisser en `root`.
+
+**`.dockerignore` n'est pas un détail de confort :** sans lui, Docker enverrait les 465 Mo de `ctf-backups/` et les archives au moteur à chaque construction. Il exclut aussi `**/.env` et `**/db.sqlite3`, pour qu'aucun secret ne se retrouve dans une couche de l'image.
+
+**`env_file: api_new/.env`** garde le jeton hors de l'image : il est lu au démarrage du conteneur, pas figé à la construction. Conséquence : après avoir modifié `.env`, il faut relancer `docker compose up -d`.
+
+**`restart: unless-stopped`** relance l'affichage après une coupure de courant, et le **`healthcheck`** interroge `/api/scoreboard` : un conteneur qui ne sert plus rien est signalé `unhealthy` au lieu de rester vert.
 
 ---
 

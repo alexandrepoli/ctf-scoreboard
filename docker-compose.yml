@@ -1,0 +1,16 @@
+services:
+  scoreboard:
+    build: .
+    # l'ecran doit repartir tout seul apres une coupure de courant
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    # CTFD_URL et CTFD_TOKEN sont lus dans ce fichier, qui reste hors de l'image
+    env_file:
+      - api_new/.env
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5001/api/scoreboard', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
