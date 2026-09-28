@@ -6,14 +6,10 @@ Affichage plein écran du classement d'une instance [CTFd](https://github.com/CT
 
 ## Prérequis
 
-- Python 3.11+
+- Docker, ou Python 3.11+
 - Une instance CTFd accessible (Docker ou distante)
 
-## Installation
-
-```bash
-pip install -r api_new/requirements.txt
-```
+## Configuration
 
 ```bash
 cp api_new/.env.example api_new/.env
@@ -33,18 +29,35 @@ CTFD_TOKEN=
 
 Le jeton reste côté serveur : le navigateur ne parle qu'à Django, jamais à CTFd. `.env` n'est pas versionné.
 
-## Lancement
+## Lancement avec Docker
 
 ```bash
+docker compose up -d
+```
+
+Le classement est sur <http://localhost:5001/double.html>. L'image lit `api_new/.env` au démarrage : après avoir changé `CTFD_URL` ou `CTFD_TOKEN`, relancer avec `docker compose up -d`.
+
+```bash
+docker compose down
+```
+
+L'image part de `python:3.13-slim`, qui existe aussi en arm64 : la même commande fonctionne sur un Raspberry Pi. Le conteneur redémarre tout seul après une coupure de courant (`restart: unless-stopped`) et se déclare en panne si l'API ne répond plus (`healthcheck`).
+
+## Lancement sans Docker
+
+```bash
+pip install -r api_new/requirements.txt
 python api_new/manage.py runserver 5001
 ```
+
+Dans les deux cas, Django sert aussi les fichiers statiques du `frontend/` : il n'y a pas de second serveur à démarrer.
+
+## Les deux pages
 
 | Page | Affichage |
 |---|---|
 | <http://localhost:5001/double.html> | double tableau, 40 rangs |
 | <http://localhost:5001> | tableau simple, 20 rangs |
-
-Django sert aussi les fichiers statiques du `frontend/`, il n'y a pas de second serveur à démarrer.
 
 Ouvrir la page par son adresse `http://localhost:5001/...`, pas en double-cliquant sur le fichier : ouverte en `file:///`, la page ne peut pas joindre Django et reste vide.
 

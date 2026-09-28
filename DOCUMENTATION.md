@@ -26,6 +26,9 @@ api_new/                     backend Django
 ├── db.sqlite3
 ├── scoreboard/              l'app (code métier)
 └── scoreboard_project/      le projet (config globale)
+Dockerfile                   image de l'application
+docker-compose.yml           lancement en une commande
+.dockerignore                ce qui reste hors du contexte de build
 frontend/                    page statique
 ├── index.html
 ├── style.css
@@ -364,7 +367,8 @@ Même principe, deux colonnes : rangs 1 à 20 à gauche, 21 à 40 à droite. Ser
 - la grille à deux colonnes (`.colonnes`) ;
 - les noms trop longs coupés par « … », sinon un nom long élargit sa colonne et pousse l'autre ;
 - la remise à zéro du podium dans la colonne de droite. Les règles de podium de `style.css` visent les trois premières lignes **de chaque** `<tbody>` : à droite, ce sont les rangs 21 à 23, qui prendraient sinon l'or, l'argent et le bronze ;
-- l'alignement des lignes entre colonnes. La plaque du leader est plus haute : rang en `1.24em`, marge `.34em`, soit `1.24 × (1.2 + 2 × .34) = 2,331em`. Le rang 21 reçoit une marge de `.479em`, qui donne la même hauteur (`1.08 × (1.2 + 2 × .479)`). Tout étant en `em`, l'alignement tient à toutes les tailles d'écran.
+- des tailles plus grandes que le tableau simple (rang, nom et score), compensées par une marge interne et un espacement entre plaques resserrés, pour que les 20 lignes par colonne tiennent toujours à l'écran ;
+- l'alignement des lignes entre colonnes. La plaque du leader garde l'or, la médaille et le reflet, mais pas la taille supplémentaire qu'elle a dans le tableau simple. **Pourquoi :** tant qu'elle était plus haute que les autres, aligner la colonne de droite demandait une marge calculée à la main sur le rang 21 — une constante qui redevenait fausse au moindre changement de taille. Toutes les lignes ayant la même hauteur, les colonnes s'alignent d'elles-mêmes.
 
 **`double.js`** reprend `app.js` avec deux différences :
 
@@ -372,6 +376,25 @@ Même principe, deux colonnes : rangs 1 à 20 à gauche, 21 à 40 à droite. Ser
 - le FLIP mesure la position **horizontale et verticale** (`translate(dx, dy)` au lieu de `translateY`), puisqu'une ligne peut changer de colonne.
 
 Le nom complet est aussi posé en `title` sur la cellule, pour les noms tronqués.
+---
+
+## Mise en conteneur — `Dockerfile`, `docker-compose.yml`
+
+**`python:3.13-slim`** existe en arm64 : la même image tourne sur un PC et sur le Raspberry Pi qui affichera le classement.
+
+**`requirements.txt` est copié seul, avant le reste du code.** Docker garde une couche par instruction et la réutilise tant que ses entrées ne changent pas : en copiant les dépendances d'abord, une modification du CSS ne déclenche pas une réinstallation de Django.
+
+**`gunicorn` plutôt que `runserver`.** Le serveur de `manage.py runserver` est un serveur de développement, mono-thread, que Django déconseille explicitement ailleurs. Il impose aussi de garder `DEBUG = True`. Deux *workers* suffisent largement pour un écran qui interroge l'API toutes les 7 secondes.
+
+**`scoreboard_project/wsgi.py`** n'existait pas : `manage.py` pose lui-même `DJANGO_SETTINGS_MODULE`, alors qu'un serveur WSGI importe l'application directement et a besoin de ce point d'entrée.
+
+**L'application tourne sous un compte sans privilèges** (`USER scoreboard`). Elle ne stocke rien et n'écrit nulle part, donc rien ne justifie de la laisser en `root`.
+
+**`.dockerignore` n'est pas un détail de confort :** sans lui, Docker enverrait les 465 Mo de `ctf-backups/` et les archives au moteur à chaque construction. Il exclut aussi `**/.env` et `**/db.sqlite3`, pour qu'aucun secret ne se retrouve dans une couche de l'image.
+
+**`env_file: api_new/.env`** garde le jeton hors de l'image : il est lu au démarrage du conteneur, pas figé à la construction. Conséquence : après avoir modifié `.env`, il faut relancer `docker compose up -d`.
+
+**`restart: unless-stopped`** relance l'affichage après une coupure de courant, et le **`healthcheck`** interroge `/api/scoreboard` : un conteneur qui ne sert plus rien est signalé `unhealthy` au lieu de rester vert.
 
 ---
 
