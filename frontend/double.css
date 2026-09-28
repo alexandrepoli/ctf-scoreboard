@@ -30,8 +30,8 @@
   font-weight: 400;
   font-size: 1em;
   letter-spacing: 0.02em;
-  padding-top: 0.24em;
-  padding-bottom: 0.24em;
+  padding-top: 0.18em;
+  padding-bottom: 0.18em;
   color: var(--phosphore);
   background-color: rgba(255, 255, 255, 0.05);
   background-image: none;
@@ -44,7 +44,7 @@
 #colonne-droite tbody tr:nth-child(-n+3) td:first-child {
   font-family: var(--font-plaque);
   font-weight: 700;
-  font-size: 1.08em;
+  font-size: 1.15em;
   color: var(--laiton);
 }
 
@@ -57,14 +57,35 @@
   content: none;
 }
 
-/* la plaque du leader est plus haute (rang 1.24em, marge .34em) : sans
-   compensation, toute la colonne gauche est decalee par rapport a la droite.
-   Hauteur du rang 1 : 1.24 x (1.2 + 2 x .34) = 2.331em de la table.
-   Rang 21 ordinaire : 1.08 x (1.2 + 2p) ; egalite pour p = .479em.
-   Tout est en em, donc l'alignement tient a toutes les tailles d'ecran. */
-#colonne-droite tbody tr:nth-child(1) td:first-child {
-  padding-top: 0.479em;
-  padding-bottom: 0.479em;
+/* Lisibilite : rang, nom et score plus grands. Les 20 lignes doivent
+   toujours tenir a l'ecran, donc la marge interne et l'espacement entre
+   plaques se resserrent d'autant. */
+.colonnes table {
+  font-size: clamp(0.8rem, 2.2vh, 2.4rem);
+  border-spacing: 0 5px;
+}
+
+.colonnes th,
+.colonnes td {
+  padding: 0.18em 0.8em;
+  line-height: 1.1;
+}
+
+.colonnes tbody td:first-child {
+  font-size: 1.15em;
+}
+
+/* la plaque du leader garde l'or, la medaille et le reflet, mais plus sa
+   taille : toutes les lignes ont alors la meme hauteur, et les deux colonnes
+   restent alignees sans constante a recalculer a chaque changement de style */
+.colonnes tbody tr:nth-child(1) td {
+  font-size: 1em;
+  padding-top: 0.18em;
+  padding-bottom: 0.18em;
+}
+
+.colonnes tbody tr:nth-child(1) td:first-child {
+  font-size: 1.15em;
 }
 
 /* petit ecran : les deux colonnes s'empilent */
