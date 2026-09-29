@@ -293,15 +293,18 @@ Ces règles ciblent l'attribut `data-podium`, posé par le JS d'après le rang r
 ### `app.js`
 
 ```javascript
-const REFRESH_MS = 7000;   // intervalle de rafraîchissement des données
-const PAR_PAGE = 20;       // lignes affichées à la fois
-const PAGE_MS = 15000;     // temps passé sur une page avant de montrer la suite
-const MOVE_MS = 700;       // durée de l'animation de dépassement
+const REFRESH_MS = 7000;     // intervalle de rafraîchissement des données
+const PAR_PAGE = 15;         // lignes affichées à la fois
+const RANGS_AFFICHES = 60;   // profondeur du classement montrée
+const PAGE_MS = 45000;       // temps passé sur une page avant de montrer la suite
+const MOVE_MS = 700;         // durée de l'animation de dépassement
 ```
 
-**Le classement défile.** L'écran montre les 20 premiers, puis les 20 suivants, et ainsi de suite jusqu'au dernier avant de revenir en tête. Sans ça, une équipe hors du top 20 n'apparaissait jamais. Deux minuteurs indépendants : un pour les données, un pour la page affichée — le classement reste à jour même pendant qu'on regarde la page des rangs 81 à 100.
+**Le classement défile.** L'écran montre les 15 premiers, puis les 15 suivants, jusqu'au rang 60, avant de revenir en tête — quatre pages, un tour complet en trois minutes. Sans ça, une équipe hors du top 15 n'apparaissait jamais. Deux minuteurs indépendants : un pour les données, un pour la page affichée, donc le classement reste à jour même pendant qu'on regarde la page des rangs 46 à 60.
 
-Avec 330 participants, un tour complet prend un peu plus de quatre minutes. Pour ne montrer que les premiers, limiter la liste dans `pageSuivante`.
+**Pourquoi 15 lignes et pas 20 :** la hauteur de l'écran est la seule contrainte réelle sur la taille du texte. À 20 lignes, les noms plafonnent autour de 23 px ; à 15, ils passent à 30 px et deviennent lisibles depuis le fond d'une salle.
+
+**Pourquoi s'arrêter au rang 60 :** l'instance de l'événement compte plus de 300 comptes. Sans plafond, le tour complet durerait un quart d'heure et le premier disparaîtrait presque tout le temps.
 
 ```javascript
 let fetchInFlight = false;
