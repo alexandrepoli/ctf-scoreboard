@@ -1,6 +1,9 @@
 const REFRESH_MS = 7000;
-const PAR_PAGE = 20;
-const PAGE_MS = 15000;
+const PAR_PAGE = 15;
+// au-dela, le tour complet devient trop long : avec 330 comptes et 45 s par
+// page, le premier ne reviendrait a l'ecran qu'un quart d'heure plus tard
+const RANGS_AFFICHES = 60;
+const PAGE_MS = 45000;
 const MOVE_MS = 700;
 
 let fetchInFlight = false;
@@ -95,7 +98,7 @@ async function loadScoreboard() {
     }
 
     statusEl.textContent = "";
-    classement = payload.data;
+    classement = payload.data.slice(0, RANGS_AFFICHES);
     if (debutPage >= classement.length) debutPage = 0;
     render();
     // memorise apres l'affichage : les fleches comparent au classement precedent,
