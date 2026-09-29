@@ -89,9 +89,11 @@ body {
   opacity: 0.45;
 }
 
-/* bulles : une tuile de 260px qui defile, donc raccord invisible en boucle.
+/* bulles : une tuile qui defile, donc raccord invisible en boucle.
    inset 16px : la couche s'arrete au bord interieur de la coque, sinon les
-   bulles passent sur les rails de rivets et se font couper par le cadre */
+   bulles passent sur les rails de rivets.
+   le masque les fait disparaitre en douceur en haut et en bas : a cette
+   taille, une bulle tranchee net par le bord se verrait tout de suite. */
 .hull::after {
   content: "";
   position: absolute;
@@ -99,20 +101,22 @@ body {
   z-index: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(circle 3px at 14% 86%, rgba(200, 250, 242, 0.34), transparent 70%),
-    radial-gradient(circle 2px at 31% 42%, rgba(200, 250, 242, 0.3), transparent 70%),
-    radial-gradient(circle 4px at 54% 68%, rgba(200, 250, 242, 0.22), transparent 70%),
-    radial-gradient(circle 2px at 73% 22%, rgba(200, 250, 242, 0.3), transparent 70%),
-    radial-gradient(circle 3px at 86% 55%, rgba(200, 250, 242, 0.26), transparent 70%),
-    radial-gradient(circle 2px at 45% 12%, rgba(200, 250, 242, 0.28), transparent 70%),
-    radial-gradient(circle 3px at 22% 60%, rgba(200, 250, 242, 0.24), transparent 70%),
-    radial-gradient(circle 2px at 65% 91%, rgba(200, 250, 242, 0.26), transparent 70%);
-  background-size: 100% 260px;
-  animation: bulles 22s linear infinite;
+    radial-gradient(circle 46px at 14% 84%, rgba(200, 250, 242, 0.2), transparent 70%),
+    radial-gradient(circle 24px at 31% 44%, rgba(200, 250, 242, 0.22), transparent 70%),
+    radial-gradient(circle 62px at 54% 66%, rgba(200, 250, 242, 0.14), transparent 70%),
+    radial-gradient(circle 33px at 73% 24%, rgba(200, 250, 242, 0.2), transparent 70%),
+    radial-gradient(circle 50px at 86% 54%, rgba(200, 250, 242, 0.16), transparent 70%),
+    radial-gradient(circle 27px at 45% 14%, rgba(200, 250, 242, 0.22), transparent 70%),
+    radial-gradient(circle 40px at 22% 60%, rgba(200, 250, 242, 0.18), transparent 70%),
+    radial-gradient(circle 20px at 65% 88%, rgba(200, 250, 242, 0.24), transparent 70%);
+  background-size: 100% 520px;
+  mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  animation: bulles 26s linear infinite;
 }
 
 @keyframes bulles {
-  to { background-position: 0 -260px; }
+  to { background-position: 0 -520px; }
 }
 
 /* ---------- le releve ---------- */
