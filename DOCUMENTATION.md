@@ -279,6 +279,10 @@ Thème « Nautilus » : coque de métal rivetée posée sur une colonne d'eau qu
 
 **Le podium.** Or, argent et bronze sur le texte, le fond et l'arête. Un `::before` en disque, placé derrière le numéro (`z-index: -1`), fait la médaille, avec son reflet décentré. Ces règles arrivent **après** celles des couleurs de podium : dans l'autre ordre, un `background` en raccourci effacerait le disque.
 
+Ces règles ciblent l'attribut `data-podium`, posé par le JS d'après le rang réel, et non les trois premières lignes du tableau. **Pourquoi :** l'écran fait défiler le classement ; sur la page des rangs 21 à 40, les trois premières lignes du tableau ne sont pas un podium.
+
+**Le filigrane est à 20 % d'opacité.** À 8 %, il était propre de près et invisible depuis le fond d'une salle.
+
 **Le reflet du leader** balaie sa plaque toutes les 7 s. Il exclut la colonne du rang (`td:not(:first-child)`), sinon il écraserait le fond de la médaille.
 
 **Les flèches de mouvement** sont des `::after` sur la cellule du rang, pilotées par l'attribut `data-mouvement` posé en JS : ▲ vert pour une montée, ▼ cuivre pour une descente.
@@ -290,10 +294,15 @@ Thème « Nautilus » : coque de métal rivetée posée sur une colonne d'eau qu
 ### `app.js`
 
 ```javascript
-const REFRESH_MS = 7000;   // intervalle de rafraîchissement
-const MAX_TEAMS = 20;      // lignes affichées
+const REFRESH_MS = 7000;   // intervalle de rafraîchissement des données
+const PAR_PAGE = 20;       // lignes affichées à la fois
+const PAGE_MS = 15000;     // temps passé sur une page avant de montrer la suite
 const MOVE_MS = 700;       // durée de l'animation de dépassement
 ```
+
+**Le classement défile.** L'écran montre les 20 premiers, puis les 20 suivants, et ainsi de suite jusqu'au dernier avant de revenir en tête. Sans ça, une équipe hors du top 20 n'apparaissait jamais. Deux minuteurs indépendants : un pour les données, un pour la page affichée — le classement reste à jour même pendant qu'on regarde la page des rangs 81 à 100.
+
+Avec 330 participants, un tour complet prend un peu plus de quatre minutes. Pour ne montrer que les premiers, limiter la liste dans `pageSuivante`.
 
 ```javascript
 let fetchInFlight = false;
@@ -344,6 +353,8 @@ async function loadScoreboard() { ... }
 - `response.ok` combiné à `payload.success` couvre à la fois les erreurs HTTP et les erreurs métier.
 - `response.status === 403` distingue « scores non publics » de « scoreboard indisponible » : deux causes, deux messages, deux remèdes.
 - `finally { fetchInFlight = false; }` libère le verrou quoi qu'il arrive.
+
+Les positions précédentes sont mémorisées **pour tout le classement**, pas seulement pour la page visible : sinon une équipe reviendrait à l'écran avec une flèche calculée sur un classement vieux de plusieurs minutes.
 
 ```javascript
 loadScoreboard();
