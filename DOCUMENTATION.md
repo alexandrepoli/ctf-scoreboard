@@ -369,20 +369,20 @@ Premier appel immédiat, sinon la page resterait vide 7 s.
 
 ## Variante 40 rangs — `double.html`, `double.css`, `double.js`
 
-Même principe, deux colonnes : 40 rangs par page, les 20 premiers à gauche et les 20 suivants à droite. Le défilement avance de 40 en 40. Servie à `/double.html` par le catch-all de `urls.py`, sans changement côté backend. Le tableau simple reste intact à `/`.
+Même principe, deux colonnes : 30 rangs par page, les 15 premiers à gauche et les 15 suivants à droite. Le défilement avance de 30 en 30, jusqu'au rang 60 — deux pages, un tour complet en une minute et demie. Servie à `/double.html` par le catch-all de `urls.py`, sans changement côté backend. Le tableau simple reste intact à `/`.
 
-**Une seule coque pour les deux colonnes.** Une équipe qui passe du rang 22 au rang 18 change de `<tbody>`. Dans une seule coque, sa ligne traverse l'écran ; avec deux cadres séparés, chacun en `overflow: hidden`, elle disparaîtrait d'un côté pour réapparaître de l'autre.
+**Une seule coque pour les deux colonnes.** Une équipe qui passe du rang 17 au rang 13 change de `<tbody>`. Dans une seule coque, sa ligne traverse l'écran ; avec deux cadres séparés, chacun en `overflow: hidden`, elle disparaîtrait d'un côté pour réapparaître de l'autre.
 
 **`double.css`** ne contient que les écarts avec `style.css` :
 
 - la grille à deux colonnes (`.colonnes`) ;
 - les noms trop longs coupés par « … », sinon un nom long élargit sa colonne et pousse l'autre ;
-- des tailles plus grandes que le tableau simple (rang, nom et score), compensées par une marge interne et un espacement entre plaques resserrés, pour que les 20 lignes par colonne tiennent toujours à l'écran ;
+- une marge interne et un interligne resserrés, pour que les 15 lignes par colonne tiennent à l'écran avec un texte de la même taille que le tableau simple ;
 - l'alignement des lignes entre colonnes. La plaque du leader garde l'or, la médaille et le reflet, mais pas la taille supplémentaire qu'elle a dans le tableau simple. **Pourquoi :** tant qu'elle était plus haute que les autres, aligner la colonne de droite demandait une marge calculée à la main sur le rang 21 — une constante qui redevenait fausse au moindre changement de taille. Toutes les lignes ayant la même hauteur, les colonnes s'alignent d'elles-mêmes.
 
 **`double.js`** reprend `app.js` avec deux différences :
 
-- `render` répartit la page de 40 lignes entre `#corps-gauche` et `#corps-droite` ;
+- `render` répartit la page de 30 lignes entre `#corps-gauche` et `#corps-droite` ;
 - le FLIP mesure la position **horizontale et verticale** (`translate(dx, dy)` au lieu de `translateY`), puisqu'une ligne peut changer de colonne.
 
 Le nom complet est aussi posé en `title` sur la cellule, pour les noms tronqués.
