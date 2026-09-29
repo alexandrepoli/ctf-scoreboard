@@ -26,14 +26,14 @@
    toujours tenir a l'ecran, donc la marge interne et l'espacement entre
    plaques se resserrent d'autant. */
 .colonnes table {
-  font-size: clamp(0.9rem, 2.8vh, 3rem);
-  border-spacing: 0 6px;
+  font-size: clamp(0.85rem, 2.25vh, 2.4rem);
+  border-spacing: 0 5px;
 }
 
 .colonnes th,
 .colonnes td {
-  padding: 0.18em 0.8em;
-  line-height: 1.1;
+  padding: 0.16em 0.8em;
+  line-height: 1.12;
 }
 
 .colonnes tbody td:first-child {
@@ -45,8 +45,8 @@
    restent alignees sans constante a recalculer a chaque changement de style */
 .colonnes tbody tr[data-podium="or"] td {
   font-size: 1em;
-  padding-top: 0.18em;
-  padding-bottom: 0.18em;
+  padding-top: 0.16em;
+  padding-bottom: 0.16em;
 }
 
 .colonnes tbody tr[data-podium="or"] td:first-child {
