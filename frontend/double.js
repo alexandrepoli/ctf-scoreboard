@@ -1,5 +1,5 @@
 const REFRESH_MS = 7000;
-const PAR_COLONNE = 15;
+const PAR_COLONNE = 20;
 const PAR_PAGE = 2 * PAR_COLONNE;
 // au-dela, le tour complet devient trop long : avec 330 comptes, le premier
 // ne reviendrait a l'ecran que bien plus tard

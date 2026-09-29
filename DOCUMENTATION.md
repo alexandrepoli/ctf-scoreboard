@@ -284,7 +284,7 @@ Thème « Nautilus » : coque de métal rivetée posée sur une colonne d'eau qu
 
 Ces règles ciblent l'attribut `data-podium`, posé par le JS d'après le rang réel, et non les trois premières lignes du tableau. **Pourquoi :** l'écran fait défiler le classement ; sur la page des rangs 21 à 40, les trois premières lignes du tableau ne sont pas un podium.
 
-**Le filigrane est à 20 % d'opacité.** À 8 %, il était propre de près et invisible depuis le fond d'une salle.
+**Le filigrane est à 45 % d'opacité.** À 8 %, il était propre de près et invisible depuis le fond d'une salle. Il occupe la bande vide entre les noms et les scores, donc il ne gêne pas la lecture même à cette valeur.
 
 **Le reflet du leader** balaie sa plaque toutes les 7 s. Il exclut la colonne du rang (`td:not(:first-child)`), sinon il écraserait le fond de la médaille.
 
@@ -298,15 +298,15 @@ Ces règles ciblent l'attribut `data-podium`, posé par le JS d'après le rang r
 
 ```javascript
 const REFRESH_MS = 7000;     // intervalle de rafraîchissement des données
-const PAR_PAGE = 15;         // lignes affichées à la fois
+const PAR_PAGE = 20;         // lignes affichées à la fois
 const RANGS_AFFICHES = 60;   // profondeur du classement montrée
 const PAGE_MS = 45000;       // temps passé sur une page avant de montrer la suite
 const MOVE_MS = 700;         // durée de l'animation de dépassement
 ```
 
-**Le classement défile.** L'écran montre les 15 premiers, puis les 15 suivants, jusqu'au rang 60, avant de revenir en tête — quatre pages, un tour complet en trois minutes. Sans ça, une équipe hors du top 15 n'apparaissait jamais. Deux minuteurs indépendants : un pour les données, un pour la page affichée, donc le classement reste à jour même pendant qu'on regarde la page des rangs 46 à 60.
+**Le classement défile.** L'écran montre les 20 premiers, puis les 20 suivants, jusqu'au rang 60, avant de revenir en tête — trois pages, un tour complet en deux minutes et quart. Sans ça, une équipe hors du top 20 n'apparaissait jamais. Deux minuteurs indépendants : un pour les données, un pour la page affichée, donc le classement reste à jour même pendant qu'on regarde la page des rangs 46 à 60.
 
-**Pourquoi 15 lignes et pas 20 :** la hauteur de l'écran est la seule contrainte réelle sur la taille du texte. À 20 lignes, les noms plafonnent autour de 23 px ; à 15, ils passent à 30 px et deviennent lisibles depuis le fond d'une salle.
+**La taille du texte est plafonnée par la hauteur de l'écran.** Vingt lignes dans 1080 px laissent environ 48 px par ligne, donc des noms autour de 24 px une fois la marge interne et l'espacement entre plaques comptés. Pour aller plus loin il faudrait afficher moins d'équipes à la fois, ce qui a été essayé puis abandonné : voir 20 équipes d'un coup compte davantage.
 
 **Pourquoi s'arrêter au rang 60 :** l'instance de l'événement compte plus de 300 comptes. Sans plafond, le tour complet durerait un quart d'heure et le premier disparaîtrait presque tout le temps.
 
@@ -372,20 +372,20 @@ Premier appel immédiat, sinon la page resterait vide 7 s.
 
 ## Variante 40 rangs — `double.html`, `double.css`, `double.js`
 
-Même principe, deux colonnes : 30 rangs par page, les 15 premiers à gauche et les 15 suivants à droite. Le défilement avance de 30 en 30, jusqu'au rang 60 — deux pages, un tour complet en une minute et demie. Servie à `/double.html` par le catch-all de `urls.py`, sans changement côté backend. Le tableau simple reste intact à `/`.
+Même principe, deux colonnes : 40 rangs par page, les 20 premiers à gauche et les 20 suivants à droite. Le défilement avance de 40 en 40, jusqu'au rang 60. Servie à `/double.html` par le catch-all de `urls.py`, sans changement côté backend. Le tableau simple reste intact à `/`.
 
-**Une seule coque pour les deux colonnes.** Une équipe qui passe du rang 17 au rang 13 change de `<tbody>`. Dans une seule coque, sa ligne traverse l'écran ; avec deux cadres séparés, chacun en `overflow: hidden`, elle disparaîtrait d'un côté pour réapparaître de l'autre.
+**Une seule coque pour les deux colonnes.** Une équipe qui passe du rang 22 au rang 18 change de `<tbody>`. Dans une seule coque, sa ligne traverse l'écran ; avec deux cadres séparés, chacun en `overflow: hidden`, elle disparaîtrait d'un côté pour réapparaître de l'autre.
 
 **`double.css`** ne contient que les écarts avec `style.css` :
 
 - la grille à deux colonnes (`.colonnes`) ;
 - les noms trop longs coupés par « … », sinon un nom long élargit sa colonne et pousse l'autre ;
-- une marge interne et un interligne resserrés, pour que les 15 lignes par colonne tiennent à l'écran avec un texte de la même taille que le tableau simple ;
+- une marge interne et un interligne resserrés, pour que les 20 lignes par colonne tiennent à l'écran avec un texte de la même taille que le tableau simple ;
 - l'alignement des lignes entre colonnes. La plaque du leader garde l'or, la médaille et le reflet, mais pas la taille supplémentaire qu'elle a dans le tableau simple. **Pourquoi :** tant qu'elle était plus haute que les autres, aligner la colonne de droite demandait une marge calculée à la main sur le rang 21 — une constante qui redevenait fausse au moindre changement de taille. Toutes les lignes ayant la même hauteur, les colonnes s'alignent d'elles-mêmes.
 
 **`double.js`** reprend `app.js` avec deux différences :
 
-- `render` répartit la page de 30 lignes entre `#corps-gauche` et `#corps-droite` ;
+- `render` répartit la page de 40 lignes entre `#corps-gauche` et `#corps-droite` ;
 - le FLIP mesure la position **horizontale et verticale** (`translate(dx, dy)` au lieu de `translateY`), puisqu'une ligne peut changer de colonne.
 
 Le nom complet est aussi posé en `title` sur la cellule, pour les noms tronqués.
