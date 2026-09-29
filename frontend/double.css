@@ -22,41 +22,6 @@
   max-width: 0;
 }
 
-/* le podium de style.css cible les 3 premieres lignes de chaque tbody :
-   dans la colonne de droite ce sont les rangs 21 a 23, qui redeviennent
-   des plaques ordinaires */
-#colonne-droite tbody tr:nth-child(-n+3) td {
-  font-family: var(--font-releve);
-  font-weight: 400;
-  font-size: 1em;
-  letter-spacing: 0.02em;
-  padding-top: 0.18em;
-  padding-bottom: 0.18em;
-  color: var(--phosphore);
-  background-color: rgba(255, 255, 255, 0.05);
-  background-image: none;
-  border-top-color: rgba(255, 255, 255, 0.07);
-  border-bottom-color: rgba(0, 0, 0, 0.3);
-  text-shadow: none;
-  animation: none;
-}
-
-#colonne-droite tbody tr:nth-child(-n+3) td:first-child {
-  font-family: var(--font-plaque);
-  font-weight: 700;
-  font-size: 1.15em;
-  color: var(--laiton);
-}
-
-#colonne-droite tbody tr:nth-child(-n+3) td:last-child {
-  letter-spacing: 0.04em;
-  text-shadow: 0 0 10px rgba(79, 214, 192, 0.45);
-}
-
-#colonne-droite tbody tr:nth-child(-n+3) td:first-child::before {
-  content: none;
-}
-
 /* Lisibilite : rang, nom et score plus grands. Les 20 lignes doivent
    toujours tenir a l'ecran, donc la marge interne et l'espacement entre
    plaques se resserrent d'autant. */
@@ -78,13 +43,13 @@
 /* la plaque du leader garde l'or, la medaille et le reflet, mais plus sa
    taille : toutes les lignes ont alors la meme hauteur, et les deux colonnes
    restent alignees sans constante a recalculer a chaque changement de style */
-.colonnes tbody tr:nth-child(1) td {
+.colonnes tbody tr[data-podium="or"] td {
   font-size: 1em;
   padding-top: 0.18em;
   padding-bottom: 0.18em;
 }
 
-.colonnes tbody tr:nth-child(1) td:first-child {
+.colonnes tbody tr[data-podium="or"] td:first-child {
   font-size: 1.15em;
 }
 
