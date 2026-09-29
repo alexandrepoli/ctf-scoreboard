@@ -282,6 +282,10 @@ Thème « Nautilus » : coque de métal rivetée posée sur une colonne d'eau qu
 
 **Le podium.** Or, argent et bronze sur le texte, le fond et l'arête. Un `::before` en disque, placé derrière le numéro (`z-index: -1`), fait la médaille, avec son reflet décentré. Ces règles arrivent **après** celles des couleurs de podium : dans l'autre ordre, un `background` en raccourci effacerait le disque.
 
+Ces règles ciblent l'attribut `data-podium`, posé par le JS d'après le rang réel, et non les trois premières lignes du tableau. **Pourquoi :** l'écran fait défiler le classement ; sur la page des rangs 21 à 40, les trois premières lignes du tableau ne sont pas un podium.
+
+**Le filigrane est à 20 % d'opacité.** À 8 %, il était propre de près et invisible depuis le fond d'une salle.
+
 **Le reflet du leader** balaie sa plaque toutes les 7 s. Il exclut la colonne du rang (`td:not(:first-child)`), sinon il écraserait le fond de la médaille.
 
 **Les flèches de mouvement** sont des `::after` sur la cellule du rang, pilotées par l'attribut `data-mouvement` posé en JS : ▲ vert pour une montée, ▼ cuivre pour une descente.
@@ -293,10 +297,15 @@ Thème « Nautilus » : coque de métal rivetée posée sur une colonne d'eau qu
 ### `app.js`
 
 ```javascript
-const REFRESH_MS = 7000;   // intervalle de rafraîchissement
-const MAX_TEAMS = 20;      // lignes affichées
+const REFRESH_MS = 7000;   // intervalle de rafraîchissement des données
+const PAR_PAGE = 20;       // lignes affichées à la fois
+const PAGE_MS = 15000;     // temps passé sur une page avant de montrer la suite
 const MOVE_MS = 700;       // durée de l'animation de dépassement
 ```
+
+**Le classement défile.** L'écran montre les 20 premiers, puis les 20 suivants, et ainsi de suite jusqu'au dernier avant de revenir en tête. Sans ça, une équipe hors du top 20 n'apparaissait jamais. Deux minuteurs indépendants : un pour les données, un pour la page affichée — le classement reste à jour même pendant qu'on regarde la page des rangs 81 à 100.
+
+Avec 330 participants, un tour complet prend un peu plus de quatre minutes. Pour ne montrer que les premiers, limiter la liste dans `pageSuivante`.
 
 ```javascript
 let fetchInFlight = false;
@@ -348,6 +357,8 @@ async function loadScoreboard() { ... }
 - `response.status === 403` distingue « scores non publics » de « scoreboard indisponible » : deux causes, deux messages, deux remèdes.
 - `finally { fetchInFlight = false; }` libère le verrou quoi qu'il arrive.
 
+Les positions précédentes sont mémorisées **pour tout le classement**, pas seulement pour la page visible : sinon une équipe reviendrait à l'écran avec une flèche calculée sur un classement vieux de plusieurs minutes.
+
 ```javascript
 loadScoreboard();
 setInterval(loadScoreboard, REFRESH_MS);
@@ -358,7 +369,7 @@ Premier appel immédiat, sinon la page resterait vide 7 s.
 
 ## Variante 40 rangs — `double.html`, `double.css`, `double.js`
 
-Même principe, deux colonnes : rangs 1 à 20 à gauche, 21 à 40 à droite. Servie à `/double.html` par le catch-all de `urls.py`, sans changement côté backend. Le tableau simple reste intact à `/`.
+Même principe, deux colonnes : 40 rangs par page, les 20 premiers à gauche et les 20 suivants à droite. Le défilement avance de 40 en 40. Servie à `/double.html` par le catch-all de `urls.py`, sans changement côté backend. Le tableau simple reste intact à `/`.
 
 **Une seule coque pour les deux colonnes.** Une équipe qui passe du rang 22 au rang 18 change de `<tbody>`. Dans une seule coque, sa ligne traverse l'écran ; avec deux cadres séparés, chacun en `overflow: hidden`, elle disparaîtrait d'un côté pour réapparaître de l'autre.
 
@@ -366,13 +377,12 @@ Même principe, deux colonnes : rangs 1 à 20 à gauche, 21 à 40 à droite. Ser
 
 - la grille à deux colonnes (`.colonnes`) ;
 - les noms trop longs coupés par « … », sinon un nom long élargit sa colonne et pousse l'autre ;
-- la remise à zéro du podium dans la colonne de droite. Les règles de podium de `style.css` visent les trois premières lignes **de chaque** `<tbody>` : à droite, ce sont les rangs 21 à 23, qui prendraient sinon l'or, l'argent et le bronze ;
 - des tailles plus grandes que le tableau simple (rang, nom et score), compensées par une marge interne et un espacement entre plaques resserrés, pour que les 20 lignes par colonne tiennent toujours à l'écran ;
 - l'alignement des lignes entre colonnes. La plaque du leader garde l'or, la médaille et le reflet, mais pas la taille supplémentaire qu'elle a dans le tableau simple. **Pourquoi :** tant qu'elle était plus haute que les autres, aligner la colonne de droite demandait une marge calculée à la main sur le rang 21 — une constante qui redevenait fausse au moindre changement de taille. Toutes les lignes ayant la même hauteur, les colonnes s'alignent d'elles-mêmes.
 
 **`double.js`** reprend `app.js` avec deux différences :
 
-- `render` répartit les 40 premières lignes entre `#corps-gauche` et `#corps-droite` ;
+- `render` répartit la page de 40 lignes entre `#corps-gauche` et `#corps-droite` ;
 - le FLIP mesure la position **horizontale et verticale** (`translate(dx, dy)` au lieu de `translateY`), puisqu'une ligne peut changer de colonne.
 
 Le nom complet est aussi posé en `title` sur la cellule, pour les noms tronqués.
