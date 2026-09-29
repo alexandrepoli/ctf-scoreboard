@@ -1,5 +1,5 @@
 const REFRESH_MS = 7000;
-const PAR_PAGE = 15;
+const PAR_PAGE = 12;
 // au-dela, le tour complet devient trop long : avec 330 comptes et 45 s par
 // page, le premier ne reviendrait a l'ecran qu'un quart d'heure plus tard
 const RANGS_AFFICHES = 60;

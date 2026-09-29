@@ -86,7 +86,7 @@ body {
   z-index: 0;
   pointer-events: none;
   background: url("logo-hackagou.png") center / auto 72% no-repeat;
-  opacity: 0.3;
+  opacity: 0.45;
 }
 
 /* bulles : une tuile de 260px qui defile, donc raccord invisible en boucle */
@@ -122,7 +122,7 @@ table {
   /* separate + border-spacing : c'est ce qui detache les plaques les unes des autres */
   border-collapse: separate;
   border-spacing: 0 6px;
-  font-size: clamp(0.9rem, 2.8vh, 3rem);
+  font-size: clamp(1rem, 3.5vh, 3.8rem);
   background: transparent;
 }
 
