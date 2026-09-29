@@ -1,7 +1,10 @@
 const REFRESH_MS = 7000;
-const PAR_COLONNE = 20;
+const PAR_COLONNE = 15;
 const PAR_PAGE = 2 * PAR_COLONNE;
-const PAGE_MS = 15000;
+// au-dela, le tour complet devient trop long : avec 330 comptes, le premier
+// ne reviendrait a l'ecran que bien plus tard
+const RANGS_AFFICHES = 60;
+const PAGE_MS = 45000;
 const MOVE_MS = 700;
 
 let fetchInFlight = false;
@@ -105,7 +108,7 @@ async function loadScoreboard() {
     }
 
     statusEl.textContent = "";
-    classement = payload.data;
+    classement = payload.data.slice(0, RANGS_AFFICHES);
     if (debutPage >= classement.length) debutPage = 0;
     render();
     // memorise apres l'affichage : les fleches comparent au classement precedent,

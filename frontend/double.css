@@ -26,8 +26,8 @@
    toujours tenir a l'ecran, donc la marge interne et l'espacement entre
    plaques se resserrent d'autant. */
 .colonnes table {
-  font-size: clamp(0.8rem, 2.2vh, 2.4rem);
-  border-spacing: 0 5px;
+  font-size: clamp(0.9rem, 2.8vh, 3rem);
+  border-spacing: 0 6px;
 }
 
 .colonnes th,
