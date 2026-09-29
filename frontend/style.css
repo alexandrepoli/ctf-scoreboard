@@ -121,14 +121,14 @@ table {
   width: 100%;
   /* separate + border-spacing : c'est ce qui detache les plaques les unes des autres */
   border-collapse: separate;
-  border-spacing: 0 6px;
-  font-size: clamp(1rem, 3.5vh, 3.8rem);
+  border-spacing: 0 5px;
+  font-size: clamp(0.85rem, 2.25vh, 2.4rem);
   background: transparent;
 }
 
 th, td {
-  padding: 0.18em 0.9em;
-  line-height: 1.15;
+  padding: 0.16em 0.9em;
+  line-height: 1.12;
   text-align: left;
 }
 

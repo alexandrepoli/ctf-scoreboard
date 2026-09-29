@@ -281,7 +281,7 @@ Thème « Nautilus » : coque de métal rivetée posée sur une colonne d'eau qu
 
 Ces règles ciblent l'attribut `data-podium`, posé par le JS d'après le rang réel, et non les trois premières lignes du tableau. **Pourquoi :** l'écran fait défiler le classement ; sur la page des rangs 21 à 40, les trois premières lignes du tableau ne sont pas un podium.
 
-**Le filigrane est à 20 % d'opacité.** À 8 %, il était propre de près et invisible depuis le fond d'une salle.
+**Le filigrane est à 45 % d'opacité.** À 8 %, il était propre de près et invisible depuis le fond d'une salle. Il occupe la bande vide entre les noms et les scores, donc il ne gêne pas la lecture même à cette valeur.
 
 **Le reflet du leader** balaie sa plaque toutes les 7 s. Il exclut la colonne du rang (`td:not(:first-child)`), sinon il écraserait le fond de la médaille.
 
@@ -295,15 +295,15 @@ Ces règles ciblent l'attribut `data-podium`, posé par le JS d'après le rang r
 
 ```javascript
 const REFRESH_MS = 7000;     // intervalle de rafraîchissement des données
-const PAR_PAGE = 15;         // lignes affichées à la fois
+const PAR_PAGE = 20;         // lignes affichées à la fois
 const RANGS_AFFICHES = 60;   // profondeur du classement montrée
 const PAGE_MS = 45000;       // temps passé sur une page avant de montrer la suite
 const MOVE_MS = 700;         // durée de l'animation de dépassement
 ```
 
-**Le classement défile.** L'écran montre les 15 premiers, puis les 15 suivants, jusqu'au rang 60, avant de revenir en tête — quatre pages, un tour complet en trois minutes. Sans ça, une équipe hors du top 15 n'apparaissait jamais. Deux minuteurs indépendants : un pour les données, un pour la page affichée, donc le classement reste à jour même pendant qu'on regarde la page des rangs 46 à 60.
+**Le classement défile.** L'écran montre les 20 premiers, puis les 20 suivants, jusqu'au rang 60, avant de revenir en tête — trois pages, un tour complet en deux minutes et quart. Sans ça, une équipe hors du top 20 n'apparaissait jamais. Deux minuteurs indépendants : un pour les données, un pour la page affichée, donc le classement reste à jour même pendant qu'on regarde la page des rangs 46 à 60.
 
-**Pourquoi 15 lignes et pas 20 :** la hauteur de l'écran est la seule contrainte réelle sur la taille du texte. À 20 lignes, les noms plafonnent autour de 23 px ; à 15, ils passent à 30 px et deviennent lisibles depuis le fond d'une salle.
+**La taille du texte est plafonnée par la hauteur de l'écran.** Vingt lignes dans 1080 px laissent environ 48 px par ligne, donc des noms autour de 24 px une fois la marge interne et l'espacement entre plaques comptés. Pour aller plus loin il faudrait afficher moins d'équipes à la fois, ce qui a été essayé puis abandonné : voir 20 équipes d'un coup compte davantage.
 
 **Pourquoi s'arrêter au rang 60 :** l'instance de l'événement compte plus de 300 comptes. Sans plafond, le tour complet durerait un quart d'heure et le premier disparaîtrait presque tout le temps.
 
