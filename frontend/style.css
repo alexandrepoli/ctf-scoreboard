@@ -86,7 +86,7 @@ body {
   z-index: 0;
   pointer-events: none;
   background: url("logo-hackagou.png") center / auto 72% no-repeat;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 /* bulles : une tuile de 260px qui defile, donc raccord invisible en boucle */
@@ -121,14 +121,14 @@ table {
   width: 100%;
   /* separate + border-spacing : c'est ce qui detache les plaques les unes des autres */
   border-collapse: separate;
-  border-spacing: 0 7px;
-  font-size: clamp(0.74rem, 1.9vh, 2.05rem);
+  border-spacing: 0 6px;
+  font-size: clamp(0.9rem, 2.8vh, 3rem);
   background: transparent;
 }
 
 th, td {
-  padding: 0.24em 0.9em;
-  line-height: 1.2;
+  padding: 0.18em 0.9em;
+  line-height: 1.15;
   text-align: left;
 }
 
@@ -179,7 +179,7 @@ tbody td:first-child {
   border-radius: 8px 0 0 8px;
   font-family: var(--font-plaque);
   font-weight: 700;
-  font-size: 1.08em;
+  font-size: 1.15em;
   color: var(--laiton);
 }
 
@@ -221,13 +221,13 @@ tbody tr[data-mouvement="descend"] td:first-child::after {
 tbody tr[data-podium="or"] td {
   font-family: var(--font-plaque);
   font-weight: 700;
-  font-size: 1.15em;
+  font-size: 1em;
   letter-spacing: 0.02em;
   color: var(--laiton-clair);
   border-top-color: rgba(242, 223, 160, 0.45);
   border-bottom-color: rgba(0, 0, 0, 0.45);
-  padding-top: 0.34em;
-  padding-bottom: 0.34em;
+  padding-top: 0.18em;
+  padding-bottom: 0.18em;
   background-color: transparent;
   background-image: linear-gradient(180deg, rgba(242, 223, 160, 0.22) 0%, rgba(201, 162, 63, 0.13) 100%);
   text-shadow: 0 0 14px rgba(242, 223, 160, 0.35);
@@ -250,7 +250,7 @@ tbody tr[data-podium="or"] td:not(:first-child) {
 }
 
 tbody tr[data-podium="or"] td:first-child {
-  font-size: 1.24em;
+  font-size: 1.15em;
 }
 
 tbody tr[data-podium="argent"] td {
