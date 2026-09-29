@@ -86,7 +86,7 @@ body {
   z-index: 0;
   pointer-events: none;
   background: url("logo-hackagou.png") center / auto 72% no-repeat;
-  opacity: 0.08;
+  opacity: 0.2;
 }
 
 /* bulles : une tuile de 260px qui defile, donc raccord invisible en boucle */
@@ -216,9 +216,9 @@ tbody tr[data-mouvement="descend"] td:first-child::after {
   color: var(--cuivre);
 }
 
-/* ---------- podium ---------- */
+/* ---------- podium : pilote par data-podium, pose en JS ---------- */
 
-tbody tr:nth-child(1) td {
+tbody tr[data-podium="or"] td {
   font-family: var(--font-plaque);
   font-weight: 700;
   font-size: 1.15em;
@@ -235,7 +235,7 @@ tbody tr:nth-child(1) td {
 
 /* reflet qui balaie la plaque du leader. Exclut la colonne du rang, sinon il
    ecraserait le fond de la medaille. */
-tbody tr:nth-child(1) td:not(:first-child) {
+tbody tr[data-podium="or"] td:not(:first-child) {
   background-image:
     linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.16) 50%, transparent 58%),
     linear-gradient(180deg, rgba(242, 223, 160, 0.22) 0%, rgba(201, 162, 63, 0.13) 100%);
@@ -249,18 +249,18 @@ tbody tr:nth-child(1) td:not(:first-child) {
   to { background-position: 220% 0, 0 0; }
 }
 
-tbody tr:nth-child(1) td:first-child {
+tbody tr[data-podium="or"] td:first-child {
   font-size: 1.24em;
 }
 
-tbody tr:nth-child(2) td {
+tbody tr[data-podium="argent"] td {
   color: var(--argent);
   background-color: rgba(211, 221, 226, 0.1);
   border-top-color: rgba(211, 221, 226, 0.28);
   text-shadow: 0 0 12px rgba(211, 221, 226, 0.28);
 }
 
-tbody tr:nth-child(3) td {
+tbody tr[data-podium="bronze"] td {
   color: var(--bronze);
   background-color: rgba(207, 145, 96, 0.12);
   border-top-color: rgba(207, 145, 96, 0.3);
@@ -268,9 +268,7 @@ tbody tr:nth-child(3) td {
 }
 
 /* medaille : disque frappe derriere le numero du podium */
-tbody tr:nth-child(1) td:first-child::before,
-tbody tr:nth-child(2) td:first-child::before,
-tbody tr:nth-child(3) td:first-child::before {
+tbody tr[data-podium] td:first-child::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -282,22 +280,22 @@ tbody tr:nth-child(3) td:first-child::before {
   z-index: -1;
 }
 
-tbody tr:nth-child(1) td:first-child::before {
+tbody tr[data-podium="or"] td:first-child::before {
   background: radial-gradient(circle at 38% 32%, rgba(255, 246, 214, 0.6), rgba(201, 162, 63, 0.38) 70%);
   box-shadow: 0 0 16px rgba(242, 223, 160, 0.4);
 }
 
-tbody tr:nth-child(2) td:first-child::before {
+tbody tr[data-podium="argent"] td:first-child::before {
   background: radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.45), rgba(211, 221, 226, 0.26) 70%);
 }
 
-tbody tr:nth-child(3) td:first-child::before {
+tbody tr[data-podium="bronze"] td:first-child::before {
   background: radial-gradient(circle at 38% 32%, rgba(255, 214, 176, 0.5), rgba(207, 145, 96, 0.3) 70%);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hull::after,
-  tbody tr:nth-child(1) td:not(:first-child) {
+  tbody tr[data-podium="or"] td:not(:first-child) {
     animation: none;
   }
 }
