@@ -374,7 +374,8 @@ Même principe, deux colonnes : 40 rangs par page, les 20 premiers à gauche et 
 
 - la grille à deux colonnes (`.colonnes`) ;
 - les noms trop longs coupés par « … », sinon un nom long élargit sa colonne et pousse l'autre ;
-- l'alignement des lignes entre colonnes. La plaque du leader est plus haute : rang en `1.24em`, marge `.34em`, soit `1.24 × (1.2 + 2 × .34) = 2,331em`. Le rang 21 reçoit une marge de `.479em`, qui donne la même hauteur (`1.08 × (1.2 + 2 × .479)`). Tout étant en `em`, l'alignement tient à toutes les tailles d'écran.
+- des tailles plus grandes que le tableau simple (rang, nom et score), compensées par une marge interne et un espacement entre plaques resserrés, pour que les 20 lignes par colonne tiennent toujours à l'écran ;
+- l'alignement des lignes entre colonnes. La plaque du leader garde l'or, la médaille et le reflet, mais pas la taille supplémentaire qu'elle a dans le tableau simple. **Pourquoi :** tant qu'elle était plus haute que les autres, aligner la colonne de droite demandait une marge calculée à la main sur le rang 21 — une constante qui redevenait fausse au moindre changement de taille. Toutes les lignes ayant la même hauteur, les colonnes s'alignent d'elles-mêmes.
 
 **`double.js`** reprend `app.js` avec deux différences :
 
