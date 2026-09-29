@@ -1,5 +1,11 @@
 /* Variante 40 rangs : reprend style.css et n'ajoute que ce qui change. */
 
+/* les colonnes sont deux fois plus etroites que sur le tableau simple : le
+   filigrane y passe sur les noms et les scores, il faut donc l'attenuer */
+.hull::before {
+  opacity: 0.22;
+}
+
 /* deux releves cote a cote dans la meme coque : une equipe qui passe
    de 21 a 20 traverse la coque au lieu de disparaitre d'un cadre a l'autre */
 .colonnes {

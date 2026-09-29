@@ -89,22 +89,24 @@ body {
   opacity: 0.45;
 }
 
-/* bulles : une tuile de 260px qui defile, donc raccord invisible en boucle */
+/* bulles : une tuile de 260px qui defile, donc raccord invisible en boucle.
+   inset 16px : la couche s'arrete au bord interieur de la coque, sinon les
+   bulles passent sur les rails de rivets et se font couper par le cadre */
 .hull::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 16px;
   z-index: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(circle 5px at 12% 86%, rgba(200, 250, 242, 0.4), transparent 70%),
-    radial-gradient(circle 3px at 31% 42%, rgba(200, 250, 242, 0.34), transparent 70%),
-    radial-gradient(circle 6px at 54% 68%, rgba(200, 250, 242, 0.26), transparent 70%),
-    radial-gradient(circle 4px at 73% 22%, rgba(200, 250, 242, 0.36), transparent 70%),
-    radial-gradient(circle 5px at 88% 55%, rgba(200, 250, 242, 0.3), transparent 70%),
-    radial-gradient(circle 3px at 45% 12%, rgba(200, 250, 242, 0.32), transparent 70%),
-    radial-gradient(circle 4px at 22% 60%, rgba(200, 250, 242, 0.28), transparent 70%),
-    radial-gradient(circle 3px at 65% 91%, rgba(200, 250, 242, 0.3), transparent 70%);
+    radial-gradient(circle 3px at 14% 86%, rgba(200, 250, 242, 0.34), transparent 70%),
+    radial-gradient(circle 2px at 31% 42%, rgba(200, 250, 242, 0.3), transparent 70%),
+    radial-gradient(circle 4px at 54% 68%, rgba(200, 250, 242, 0.22), transparent 70%),
+    radial-gradient(circle 2px at 73% 22%, rgba(200, 250, 242, 0.3), transparent 70%),
+    radial-gradient(circle 3px at 86% 55%, rgba(200, 250, 242, 0.26), transparent 70%),
+    radial-gradient(circle 2px at 45% 12%, rgba(200, 250, 242, 0.28), transparent 70%),
+    radial-gradient(circle 3px at 22% 60%, rgba(200, 250, 242, 0.24), transparent 70%),
+    radial-gradient(circle 2px at 65% 91%, rgba(200, 250, 242, 0.26), transparent 70%);
   background-size: 100% 260px;
   animation: bulles 22s linear infinite;
 }
