@@ -269,14 +269,16 @@ tbody tr[data-podium="bronze"] td {
   text-shadow: 0 0 12px rgba(207, 145, 96, 0.28);
 }
 
-/* medaille : disque frappe derriere le numero du podium */
+/* medaille : disque frappe derriere le numero du podium.
+   1.3em et pas davantage : la ligne fait environ 1.45em de haut, un disque
+   plus grand deborde de la plaque au lieu de tenir dedans. */
 tbody tr[data-podium] td:first-child::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 1.75em;
-  height: 1.75em;
+  width: 1.3em;
+  height: 1.3em;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   z-index: -1;
